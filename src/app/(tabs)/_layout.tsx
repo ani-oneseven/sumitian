@@ -32,7 +32,7 @@ export default function TabLayout() {
           title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/MyAccountModal" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -48,10 +48,17 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="BookVodScreen"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Book VOD',
+          tabBarIcon: ({ color }) => <TabBarIcon name="video-camera" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="FeeScreen"
+        options={{
+          title: 'Fee',
+          tabBarIcon: ({ color }) => <TabBarIcon name="th-list" color={color} />,
         }}
       />
     </Tabs>
