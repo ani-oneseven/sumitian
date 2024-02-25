@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { View, Text } from './Themed';
+import { View } from './Themed';
 import { SelectList } from 'react-native-dropdown-select-list';
 import Colors from '@/constants/Colors';
 
@@ -84,8 +84,7 @@ const ClassDetails: React.FC = (props) => {
         <SelectList
           setSelected={setStandardValue}
           data={standard}
-          placeholder='Select Class'
-          defaultOption={standard[1]}
+          placeholder='Class'
           search={false}
           dropdownShown={false}
           maxHeight={150}
@@ -100,8 +99,7 @@ const ClassDetails: React.FC = (props) => {
           <SelectList
             setSelected={(val) => setSubjectValue(val)}
             data={subject[standardValue]}
-            placeholder='Select Subject'
-            defaultOption={subject[standardValue][2]}
+            placeholder='Subject'
             search={false}
             dropdownShown={false}
             maxHeight={150}
@@ -117,8 +115,7 @@ const ClassDetails: React.FC = (props) => {
           <SelectList
             setSelected={setChapterValue}
             data={chapter[subjectValue]}
-            placeholder='Select Chapter'
-            defaultOption={chapter[subjectValue][0]}
+            placeholder='Chapter'
             search={false}
             dropdownShown={false}
             maxHeight={150}
