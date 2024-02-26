@@ -3,7 +3,6 @@ import {
   StyleSheet,
   ScrollView,
   StatusBar,
-  ImageBackground,
   TouchableOpacity,
   FlatList,
   ToastAndroid,
@@ -45,7 +44,6 @@ const generateSeats = () => {
   let numColumn = timesSlots.length;
   let rowArray = [];
   let start = 1;
-  // let reachfour = false;
 
   for (let i = 0; i < numRow; i++) {
     let columnArray = [];
@@ -60,18 +58,8 @@ const generateSeats = () => {
       columnArray.push(seatObject);
       start++;
     }
-    // if (i == 3) {
-    //   numColumn += 2;
-    // }
-    // if (numColumn < 9 && !reachfour) {
-    //   numColumn += 2;
-    // } else {
-    //   reachfour = true;
-    //   numColumn -= 2;
-    // }
     rowArray.push(columnArray);
   }
-  console.log(rowArray);
   return rowArray;
 };
 
@@ -188,87 +176,54 @@ export default function FeeScreen() {
         />
       </View>
 
-      <View style={styles.seatContainer}>
-        <View style={styles.containerGap20}>
-          {twoDSeatArray?.map((item, index) => {
-            return (
-              <View key={index} style={styles.seatRow}>
-                {item?.map((subitem, subindex) => {
+      <View style={styles.OutterContainer}>
+        {twoDSeatArray?.map((item, mainindex) => {
+          return (
+            <View key={mainindex}>
+              <Text style={styles.screenNumberText}>{item[mainindex]?.screen}</Text>
+              <FlatList
+                data={item}
+                keyExtractor={item => item.number}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                bounces={false}
+                contentContainerStyle={styles.containerGap24}
+                renderItem={({ item, index }) => {
                   return (
-                    <TouchableOpacity
-                      key={subitem.number}
-                      onPress={() => {
-                        selectSeat(index, subindex, subitem.number);
-                      }}>
-                      <FontAwesome
-                        name="circle"
+                    <TouchableOpacity onPress={() => selectSeat(mainindex, index, item.number)}>
+                      <View
                         style={[
-                          styles.seatIcon,
-                          subitem.taken ? { color: Colors.light.tabIconDefault } : {},
-                          subitem.selected ? { color: Colors.light.tint } : {},
-                        ]}
-                      />
+                          styles.timeContainer,
+                          item.number == 1
+                            ? { marginLeft: SPACING.space_24 }
+                            : item.number % 5 == 0
+                              ? { marginRight: SPACING.space_24 }
+                              : item.number % 5 == 1
+                                ? { marginLeft: SPACING.space_24 }
+                                : {},
+                          item.taken ? { backgroundColor: Colors.light.tabIconDefault } : {},
+                          item.selected ? { backgroundColor: Colors.light.tint } : {},
+                        ]}>
+                        <Text style={styles.timeText}>{item.timeSlot}</Text>
+                      </View>
                     </TouchableOpacity>
                   );
-                })}
-              </View>
-            );
-          })}
-        </View>
+                }}
+              />
+            </View>
+          );
+        })}
         <View style={styles.seatRadioContainer}>
           <View style={styles.radioContainer}>
-            <FontAwesome
-              name="circle"
-              style={styles.radioIcon} />
-            <Text style={styles.radioText}>Available</Text>
+            <Text style={[styles.radioText, { borderColor: Colors.light.tabIconDefault, borderWidth: 1 }]}>Available</Text>
           </View>
           <View style={styles.radioContainer}>
-            <FontAwesome
-              name="circle"
-              style={[styles.radioIcon, { color: Colors.light.tabIconDefault }]}
-            />
-            <Text style={styles.radioText}>Taken</Text>
+            <Text style={[styles.radioText, { backgroundColor: Colors.light.tabIconDefault }]}>Taken</Text>
           </View>
           <View style={styles.radioContainer}>
-            <FontAwesome
-              name="circle"
-              style={[styles.radioIcon, { color: Colors.light.tint }]}
-            />
-            <Text style={styles.radioText}>Selected</Text>
+            <Text style={[styles.radioText, { backgroundColor: Colors.light.tint }]}>Selected</Text>
           </View>
         </View>
-      </View>
-
-      <View style={styles.OutterContainer}>
-        <Text style={styles.screenNumberText}>VOD-1</Text>
-        <FlatList
-          data={timesSlots}
-          keyExtractor={item => item}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          bounces={false}
-          contentContainerStyle={styles.containerGap24}
-          renderItem={({ item, index }) => {
-            return (
-              <TouchableOpacity onPress={() => setSelectedTimeIndex(index)}>
-                <View
-                  style={[
-                    styles.timeContainer,
-                    index == 0
-                      ? { marginLeft: SPACING.space_24 }
-                      : index == dateArray.length - 1
-                        ? { marginRight: SPACING.space_24 }
-                        : {},
-                    index == selectedTimeIndex
-                      ? { backgroundColor: Colors.light.tint }
-                      : {},
-                  ]}>
-                  <Text style={styles.timeText}>{item}</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
       </View>
 
       <View style={styles.buttonSlotsContainer}>
@@ -289,62 +244,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     backgroundColor: Colors.light.background,
-  },
-  ImageBG: {
-    width: '100%',
-    aspectRatio: 3072 / 1727,
-  },
-  linearGradient: {
-    height: '100%',
-  },
-  appHeaderContainer: {
-    marginHorizontal: SPACING.space_36,
-    marginTop: SPACING.space_20 * 2,
-  },
-  screenText: {
-    textAlign: 'center',
-    fontFamily: 'PoppinsRegular',
-    fontSize: FONTSIZE.size_10,
-    color: COLORS.WhiteRGBA15,
-  },
-  seatContainer: {
-    marginVertical: SPACING.space_20,
-  },
-  containerGap20: {
-    gap: SPACING.space_20,
-  },
-  seatRow: {
-    flexDirection: 'row',
-    gap: SPACING.space_20,
-    justifyContent: 'center',
-  },
-  seatIcon: {
-    fontSize: FONTSIZE.size_24,
-    borderColor: Colors.light.tabIconDefault,
-  },
-  seatRadioContainer: {
-    flexDirection: 'row',
-    marginTop: SPACING.space_36,
-    marginBottom: SPACING.space_10,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-  },
-  radioContainer: {
-    flexDirection: 'row',
-    gap: SPACING.space_10,
-    alignItems: 'center',
-  },
-  radioIcon: {
-    fontSize: FONTSIZE.size_20,
-    color: Colors.light.text,
-  },
-  radioText: {
-    fontFamily: 'PoppinsMedium',
-    fontSize: FONTSIZE.size_12,
-    color: Colors.light.text,
-  },
-  containerGap24: {
-    // gap: SPACING.space_2,
   },
   MonthText: {
     height: SPACING.space_28,
@@ -370,6 +269,30 @@ const styles = StyleSheet.create({
     fontFamily: 'PoppinsRegular',
     fontSize: FONTSIZE.size_12,
     color: Colors.light.text,
+  },
+  seatRadioContainer: {
+    flexDirection: 'row',
+    marginTop: SPACING.space_36,
+    marginBottom: SPACING.space_10,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  radioContainer: {
+    flexDirection: 'row',
+    gap: SPACING.space_10,
+    alignItems: 'center',
+  },
+  radioText: {
+    width: 70,
+    textAlign: 'center',
+    padding: SPACING.space_4,
+    fontFamily: 'PoppinsMedium',
+    fontSize: FONTSIZE.size_10,
+    color: Colors.light.text,
+    borderRadius: SPACING.space_18,
+  },
+  containerGap24: {
+    // gap: SPACING.space_2,
   },
   OutterContainer: {
     marginVertical: SPACING.space_28,
@@ -399,7 +322,6 @@ const styles = StyleSheet.create({
   },
   buttonSlotsContainer: {
     flexDirection: 'row',
-
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: SPACING.space_24,
