@@ -70,6 +70,7 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="MyAccountModal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="TicketScreen" options={{ presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>
   );
