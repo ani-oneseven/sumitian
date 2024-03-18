@@ -58,7 +58,7 @@ export default function TabLayout() {
         name="FeeScreen"
         options={{
           title: 'Fee',
-          tabBarIcon: ({ color }) => <TabBarIcon name="th-list" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="credit-card" color={color} />,
         }}
       />
     </Tabs>

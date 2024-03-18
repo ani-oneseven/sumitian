@@ -1,6 +1,6 @@
-import { FlatList, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Text, View } from '@/components/Themed';
+// import { Text, View } from '@/components/Themed';
 import { FONTSIZE, SPACING } from '@/theme/theme';
 import Colors from '@/constants/Colors';
 import { Stack } from 'expo-router';
@@ -46,7 +46,7 @@ export default function FeeScreen() {
         }}
       />
       <Text style={styles.title}>Fee Details</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.separator}/>
       <FlatList
         data={feeArray}
         // keyExtractor={item => item.dueDate}
@@ -73,7 +73,7 @@ export default function FeeScreen() {
                     )}
                   </Pressable>
                 </View>
-                <View lightColor={item.paid == true ? '#00A86B' : '#FD3C4A'} >
+                <View>
                   <Text style={[styles.feeText, { fontSize: FONTSIZE.size_20 }]}>Installment - {item.installment}</Text>
                   <Text style={[styles.feeText,]}>{item.paid == true ? 'Paid on - ' : 'Due on - '}{item.dueDate}</Text>
                   <Text style={[styles.feeText, { fontSize: FONTSIZE.size_24 }]}>₹ {item.amount}</Text>
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: SPACING.space_40,
+    backgroundColor: Colors.light.tabIconDefault
     // borderWidth: SPACING.space_2,
     // shadowColor: "red",
     // // elevation: 1,
