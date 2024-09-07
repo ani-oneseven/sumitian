@@ -6,6 +6,7 @@ import { Pressable } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { SPACING } from '@/theme/theme';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -25,6 +26,13 @@ export default function TabLayout() {
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
+        tabBarShowLabel: false,
+        tabBarStyle:{
+          // marginVertical: SPACING.space_10,
+          // marginHorizontal: SPACING.space_10*8,
+          // borderRadius: SPACING.space_10*10,
+          // backgroundColor: Colors.light.background,
+        }
       }}>
       <Tabs.Screen
         name="index"

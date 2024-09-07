@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   ScrollView,
-  StatusBar,
   TouchableOpacity,
   FlatList,
   ToastAndroid,
@@ -26,6 +25,7 @@ import * as SecureStore from 'expo-secure-store';
 import TicketScreen from '../TicketScreen';
 import { Slot, SlotTimming, Ticket, VodScreen } from '@/types';
 import bookings from '../../../assets/data/bookings';
+import { useBooking } from '@/providers/BookingProvider';
 
 const timesSlots: SlotTimming[] = ['2:30', '3:30', '4:30', '5:30', '6:30'];
 const vodScreens: VodScreen[] = ['VOD-1', 'VOD-2', 'VOD-3', 'VOD-4'];
@@ -75,13 +75,14 @@ const findTakenSlots = (bookings: Ticket[], bookedForDate: string) => {
     if (moment(booking.bookedForDate).isSame(bookedForDate, 'day')) {
       booking.slot.forEach(slot => {
         takenSlots.push(slot.id);
-     });
+      });
     }
   });
   return takenSlots;
 }
 
 export default function FeeScreen() {
+
   const [dateArray, setDateArray] = useState<any[]>(generateDate());
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [takenSlots, setTakenSlots] = useState<string[]>();
@@ -95,8 +96,10 @@ export default function FeeScreen() {
   useEffect(() => { setSelectedSlot([]); setSlots(0) }, [selectedDate]);
   useEffect(() => { setSlots(selectedSlot.length) }, [selectedSlot]);
 
+  const { addTicket } = useBooking();
+
   const selectSlot = (id: string) => {
-    console.log("seletedSlot", selectedSlot, id);
+    // console.log("seletedSlot", selectedSlot, id);
     if (selectedDate) {
       selectedSlot.includes(id) ?
         setSelectedSlot(selectedSlot.filter(item => item !== id))
@@ -124,7 +127,7 @@ export default function FeeScreen() {
         }
       });
     })
-    console.log(TicketArray);
+    // console.log(TicketArray);
     return TicketArray;
   };
 
@@ -138,6 +141,9 @@ export default function FeeScreen() {
           'ticket',
           JSON.stringify(generateTicket(selectedDate, slotMatrix, selectedSlot)),
         );
+        addTicket(generateTicket(selectedDate, slotMatrix, selectedSlot));
+        setSelectedSlot([]);
+        setSlots(0);
         router.push('/TicketScreen');
       } catch (error) {
         console.error(
@@ -172,7 +178,6 @@ export default function FeeScreen() {
           headerTitleStyle: { fontFamily: 'PoppinsBold' },
         }}
       />
-      <StatusBar hidden />
       <View>
         <Text style={styles.MonthText}>{selectedDate ? moment(selectedDate).format('MMM') : 'Month'}</Text>
         <FlatList
@@ -270,15 +275,6 @@ export default function FeeScreen() {
         </View>
 
         <TouchableOpacity onPress={() => {
-          // console.log('dateArray=', dateArray);
-          // console.log('selectedDate=', dateArray[selectedDate]);
-          // console.log('slots=', slots);
-          // console.log('slotMatrix=', slotMatrix);
-          // console.log('selectedSlot=', selectedSlot);
-          // console.log('selectedTimeIndex=',selectedTimeIndex);
-          // selectedSlot.map((item, index) => {
-          //   console.log(slotMatrix[item].)
-          // });
           BookSlots(selectedDate, slotMatrix, selectedSlot);
         }}>
           <Text style={styles.buttonText}>Book Slots</Text>
@@ -335,7 +331,7 @@ const styles = StyleSheet.create({
   screenNumberText: {
     marginBottom: SPACING.space_8,
     textAlign: 'center',
-    fontFamily: 'PoppinsRegular',
+    fontFamily: 'PoppinsMedium',
     fontSize: FONTSIZE.size_14,
     color: COLORS.Grey,
   },
